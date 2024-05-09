@@ -9,6 +9,7 @@ import { AccountUseCase } from "../application/use-case/AccountUseCase";
 import { AccountController } from "./AccountController";
 import { PrismaAccountRepository } from "../infrastructure/PrismaAccountRepository";
 import { ICreateAccountDto, IGetAccountDto } from "../entity/AccountDto";
+import prisma from "../shared/prisma";
 
 export class Server {
 	private readonly _prismaClient: PrismaClient;
@@ -20,7 +21,7 @@ export class Server {
 	private readonly _accountController: AccountController;
 
 	constructor() {
-		this._prismaClient = new PrismaClient();
+		this._prismaClient = prisma;
 
 		// user
 		this._prismaUserRepository = new PrismaUserRepository(this._prismaClient);

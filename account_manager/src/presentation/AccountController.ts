@@ -14,10 +14,12 @@ export class AccountController {
 	public constructor(private readonly _useCase: AccountUseCase) {}
 
 	public async create(req: FastifyRequest<{ Body: ICreateAccountDto }>, res: FastifyReply): Promise<void> {
-		const { type, userId } = req.body;
+		const { type, userId, paymentId, balance } = req.body;
 		const result = await this._useCase.create({
 			type,
 			userId,
+			paymentId,
+			balance,
 		});
 
 		const response = new CreatedAccountDto(result.id);
@@ -28,6 +30,7 @@ export class AccountController {
 	public async find(req: FastifyRequest<{ Params: IGetAccountDto }>, res: FastifyReply): Promise<void> {
 		const result = await this._useCase.find({
 			id: req.params.id,
+			userId: req.user!.id,
 		});
 
 		res.send(result);

@@ -15,8 +15,8 @@ datasource db {
 
 model User {
   id              Int              @id @default(autoincrement())
-  username        String           @unique
-  password        String
+  supabaseId      String           @map("supabase_id")
+  email           String           @unique
   paymentAccounts PaymentAccount[]
   createdAt       DateTime         @default(now()) @map("created_at")
 
@@ -24,12 +24,14 @@ model User {
 }
 
 model PaymentAccount {
-  id        Int              @id @default(autoincrement())
-  type      String
-  user      User             @relation(fields: [userId], references: [id])
-  userId    Int              @map("user_id")
-  history   PaymentHistory[]
-  createdAt DateTime         @default(now()) @map("created_at")
+  id                Int              @id @default(autoincrement())
+  type              String
+  user              User             @relation(fields: [userId], references: [id])
+  userId            Int              @map("user_id")
+  history           PaymentHistory[]
+  paymentIdentifier String           @map("payment_id")
+  balance           Float
+  createdAt         DateTime         @default(now()) @map("created_at")
 
   @@map("payment_account")
 }

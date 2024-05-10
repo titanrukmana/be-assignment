@@ -19,7 +19,7 @@ describe("PrismaUserRepository", () => {
 		const now = new Date();
 		const user: User = {
 			id: 3,
-			username: "Nice",
+			email: "Nice",
 			password: "test",
 			createdAt: now,
 		};

@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"@fastify/cookie": "^9.3.1",
 		"@prisma/client": "^5.13.0",
 		"@supabase/supabase-js": "^2.43.1",
 		"bcrypt": "^5.1.1",
@@ -13,7 +14,7 @@
 	"scripts": {
 		"test": "jest --verbose false",
 		"build": "rm -rf build && tsc -w",
-		"dev": "rm -rf build && tsc && nodemon build/src/main.js",
+		"dev": "rm -rf build && tsc && NODE_ENV=development nodemon build/src/main.js",
 		"start": "node build/src/main.js"
 	},
 	"keywords": [],

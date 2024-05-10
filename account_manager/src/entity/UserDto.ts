@@ -1,14 +1,14 @@
 import { User } from "../domain/User";
 
 export class IUserDto {
-	public constructor(public readonly username: string) {}
+	public constructor(public readonly email: string) {}
 	public static from(user: User): IUserDto {
-		return new IUserDto(user.username);
+		return new IUserDto(user.email);
 	}
 }
 
 export interface ICreateUserDto {
-	username: string;
+	email: string;
 	password: string;
 }
 
@@ -21,8 +21,17 @@ export interface ICreateUserResultDto {
 }
 
 export interface IUserPublicDto {
-	id: number;
-	username: string;
+	id: string;
+	email: string;
 }
 
-export interface IAuthenticateUserResultDto {}
+export interface IAuthenticateUserDto {
+	email: string;
+	password: string;
+}
+
+export interface IAuthenticateUserResultDto {
+	email: string;
+	supabaseId: string;
+	accessToken: string;
+}

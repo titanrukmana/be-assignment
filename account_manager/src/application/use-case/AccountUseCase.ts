@@ -14,7 +14,7 @@ export class AccountUseCase {
 
 		if (!user) throw new Error("user not found!");
 
-		const account = new Account(1, input.type, user);
+		const account = new Account(1, input.type, input.paymentId, input.balance, user);
 
 		const result = await this._accountRepo.save(account);
 
@@ -24,7 +24,7 @@ export class AccountUseCase {
 	}
 
 	public async find(input: IGetAccountDto): Promise<Account> {
-		const account = await this._accountRepo.find(input.id);
+		const account = await this._accountRepo.find(input.id, input.userId);
 		if (!account) throw new Error("not found!");
 
 		return account;

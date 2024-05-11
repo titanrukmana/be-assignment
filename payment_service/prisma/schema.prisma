@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  supabaseId String   @map("supabase_id")
+  email      String   @unique
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("user")
+}
+
+model PaymentAccount {
+  id                Int              @id @default(autoincrement())
+  type              String
+  userId            String           @map("user_id")
+  history           PaymentHistory[]
+  paymentIdentifier String           @map("payment_id")
+  balance           Float
+  currency          Currency         @relation(fields: [currencyId], references: [id])
+  currencyId        Int              @map("currency_id")
+  createdAt         DateTime         @default(now()) @map("created_at")
+
+  @@map("payment_account")
+}
+
+model PaymentHistory {
+  id               Int            @id @default(autoincrement())
+  account          PaymentAccount @relation(fields: [paymentAccountId], references: [id])
+  paymentAccountId Int            @map("account_id")
+  amount           Float
+  recipient        String
+  currency         Currency       @relation(fields: [currencyId], references: [id])
+  currencyId       Int            @map("currency_id")
+  status           Boolean
+  createdAt        DateTime       @default(now()) @map("created_at")
+
+  @@map("payment_history")
+}
+
+model Currency {
+  id             Int              @id @default(autoincrement())
+  code           String           @unique
+  toUsd          Float            @map("to_usd")
+  PaymentAccount PaymentAccount[]
+  PaymentHistory PaymentHistory[]
+
+  @@map("currency")
+}

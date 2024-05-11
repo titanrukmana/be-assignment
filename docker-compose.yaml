@@ -1,8 +1,14 @@
 services:
+  nginx:
+    restart: always
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+
   pgdb:
-    container_name: pgdb
     image: postgres:16
-    restart: unless-stopped
+    restart: always
     env_file:
       - .env
     environment:
@@ -15,15 +21,23 @@ services:
     volumes:
       - pgdb:/var/lib/postgres
 
-  concreteai-account:
-    container_name: account
-    build: ./account_manager
+  payment:
+    build: ./payment_service
     depends_on:
       - pgdb
+    restart: always
     ports:
       - 8000:8000
     env_file:
-      - ./account_manager/.env
+      - ./payment_service/.env
+
+  account:
+    build: ./account_service
+    restart: always
+    ports:
+      - 3000:3000
+    env_file:
+      - ./account_service/.env
 
 volumes:
   pgdb:

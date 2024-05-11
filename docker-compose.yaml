@@ -19,7 +19,7 @@ services:
     ports:
       - 5434:5432
     volumes:
-      - pgdb:/var/lib/postgres
+      - pgdb:/var/lib/postgresql/data
 
   payment:
     build: ./payment_service

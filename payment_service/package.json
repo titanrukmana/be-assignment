@@ -13,6 +13,7 @@
 	"scripts": {
 		"test": "jest --verbose false",
 		"build": "tsc -b",
+		"seed": "ts-node prisma/seeder/seed.ts",
 		"dev": "tsc -b && NODE_ENV=development nodemon build/src/main.js",
 		"start": "node ./build/src/main.js"
 	},

@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { IUserRepository } from "../application/repository/UserRepository";
 import { User } from "../domain/User";
-import bcrypt from "bcrypt";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { IAuthenticateUserDto, IAuthenticateUserResultDto, ICreateUserDto } from "../entity/UserDto";
 

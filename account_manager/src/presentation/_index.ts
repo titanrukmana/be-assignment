@@ -57,10 +57,6 @@ export class Server {
 				this._userController.auth(req, res)
 			);
 
-			instance.post("/logout", (req: FastifyRequest<{ Body: IAuthenticateUserDto }>, res: FastifyReply) =>
-				this._userController.logout(req, res)
-			);
-
 			next();
 		};
 
@@ -77,6 +73,10 @@ export class Server {
 
 			instance.get("/account/:id", (req: FastifyRequest<{ Params: IGetAccountDto }>, res: FastifyReply) =>
 				this._accountController.find(req, res)
+			);
+
+			instance.post("/logout", (req: FastifyRequest<{ Body: IAuthenticateUserDto }>, res: FastifyReply) =>
+				this._userController.logout(req, res)
 			);
 
 			next();

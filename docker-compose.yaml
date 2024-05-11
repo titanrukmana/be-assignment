@@ -1,0 +1,31 @@
+services:
+  db:
+    container_name: pg_db
+    image: postgres:16
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_USER
+      - POSTGRES_DB=$POSTGRES_USER
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgres
+
+  concreteai-account:
+    container_name: account
+    build: ./account_manager
+    depends_on:
+      - db
+    network_mode: "host"
+    volumes:
+      - ./account_manager:/app
+      - account_manager_node-modules:/app/node_modules
+    env_file:
+      - ./account_manager/.env
+
+volumes:
+  db:
+  account_manager_node-modules:

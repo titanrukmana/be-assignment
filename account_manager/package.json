@@ -12,9 +12,9 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest --verbose false",
-		"build": "rm -rf build && tsc",
-		"dev": "rm -rf build && tsc && NODE_ENV=development nodemon build/src/main.js",
-		"start": "node build/src/main.js"
+		"build": "tsc -b",
+		"dev": "tsc -b && NODE_ENV=development nodemon build/src/main.js",
+		"start": "ls && node ./build/src/main.js"
 	},
 	"keywords": [],
 	"author": "",

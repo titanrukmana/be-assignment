@@ -1,19 +1,19 @@
-FROM node
+FROM node:22.1.0-alpine
 
 WORKDIR /app
 
-COPY package.json /app
+COPY package.json .
 
-ENV NODE_ENV=production
+COPY tsconfig.json .
 
-RUN npm install
+RUN NODE_ENV=development npm install
 
-COPY . /app
+COPY ./ ./
 
 RUN npm run build
 
-EXPOSE 8000
-
 RUN npx prisma generate
 
-CMD ["node", "build/src/main.js"]
+EXPOSE 8000
+
+CMD ["npm", "start"]

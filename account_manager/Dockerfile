@@ -10,10 +10,8 @@ RUN NODE_ENV=development npm install
 
 COPY ./ ./
 
-RUN npm run build
-
 RUN npx prisma generate
 
-EXPOSE 8000
+RUN npm run build
 
 CMD ["npm", "start"]

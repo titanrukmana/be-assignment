@@ -36,7 +36,7 @@ func (a *userHandler) Auth(c *gin.Context) {
 	user, err := a.UserUsecase.Auth(c, &a.SupabaseClient, supabase.UserCredentials{Email: request.Email, Password: request.Password})
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "internal server error"})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -76,9 +76,9 @@ func (a *userHandler) Register(c *gin.Context) {
 	err := a.UserUsecase.Register(c, &a.SupabaseClient, domain.User{Email: request.Email, Password: request.Password})
 
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Success"})
+	c.JSON(http.StatusOK, gin.H{"message": "register success"})
 }

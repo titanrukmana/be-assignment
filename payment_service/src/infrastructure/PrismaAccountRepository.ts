@@ -2,6 +2,12 @@ import { PrismaClient } from "@prisma/client";
 import { IAccountRepository } from "../application/repository/AccountRepository";
 import { ICreateAccountDto } from "../domain/AccountDto";
 import { Account } from "../domain/TransactionDto";
+import {
+	PrismaClientKnownRequestError,
+	PrismaClientUnknownRequestError,
+	PrismaClientValidationError,
+} from "@prisma/client/runtime/library";
+import { BadRequestError, NotFoundError } from "../shared/ErrorInstances";
 
 export class PrismaAccountRepository implements IAccountRepository {
 	public constructor(private readonly _prismaClient: PrismaClient) {}
@@ -18,20 +24,12 @@ export class PrismaAccountRepository implements IAccountRepository {
 					paymentIdentifier: true,
 					balance: true,
 					currency: true,
-					userId: true,
 				},
 			});
 
-			if (!result) throw new Error("not found");
+			if (!result) throw new Error("account not found");
 
-			return new Account(
-				result.id,
-				result.type,
-				result.paymentIdentifier,
-				result.balance,
-				result.currency,
-				result.userId
-			);
+			return result as Account;
 		} catch (e) {
 			throw e;
 		}
@@ -45,9 +43,7 @@ export class PrismaAccountRepository implements IAccountRepository {
 				},
 			});
 
-			if (!currency) throw new Error("currency not found!");
-
-			console.log(account.userId);
+			if (!currency) throw new NotFoundError("currency not found");
 
 			const result = await this._prismaClient.paymentAccount.create({
 				data: {
@@ -63,6 +59,14 @@ export class PrismaAccountRepository implements IAccountRepository {
 
 			return result.id;
 		} catch (e) {
+			if (e instanceof PrismaClientKnownRequestError) {
+				if (e.code === "P2002") {
+					e = new BadRequestError("payment id exists");
+				}
+			}
+			if (e instanceof PrismaClientValidationError) {
+				e = new BadRequestError("field incomplete");
+			}
 			throw e;
 		}
 	}
@@ -77,6 +81,9 @@ export class PrismaAccountRepository implements IAccountRepository {
 
 			return !!result;
 		} catch (e) {
+			if (e instanceof PrismaClientValidationError) {
+				e = new BadRequestError("field incomplete");
+			}
 			throw e;
 		}
 	}
@@ -97,21 +104,16 @@ export class PrismaAccountRepository implements IAccountRepository {
 					paymentIdentifier: true,
 					balance: true,
 					currency: true,
-					userId: true,
 				},
 			});
 
-			if (!result) return result;
+			if (!result) throw new NotFoundError("account not found");
 
-			return new Account(
-				result.id,
-				result.type,
-				result.paymentIdentifier,
-				result.balance,
-				result.currency,
-				result.userId
-			);
+			return result as Account;
 		} catch (e) {
+			if (e instanceof PrismaClientValidationError) {
+				e = new BadRequestError("field incomplete");
+			}
 			throw e;
 		}
 	}
@@ -127,16 +129,15 @@ export class PrismaAccountRepository implements IAccountRepository {
 					balance: true,
 					paymentIdentifier: true,
 					type: true,
-					currency: {
-						select: {
-							code: true,
-						},
-					},
+					currency: true,
 				},
 			});
 
 			return res as Account[];
 		} catch (e) {
+			if (e instanceof PrismaClientValidationError) {
+				e = new BadRequestError("field incomplete");
+			}
 			throw e;
 		}
 	}

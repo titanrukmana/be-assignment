@@ -28,7 +28,7 @@ model PaymentAccount {
   type              String
   userId            String           @map("user_id")
   history           PaymentHistory[]
-  paymentIdentifier String           @map("payment_id")
+  paymentIdentifier String           @unique @map("payment_id")
   balance           Float
   currency          Currency         @relation(fields: [currencyId], references: [id])
   currencyId        Int              @map("currency_id")

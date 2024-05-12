@@ -47,6 +47,9 @@ CREATE TABLE "currency" (
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "payment_account_payment_id_key" ON "payment_account"("payment_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "currency_code_key" ON "currency"("code");
 
 -- AddForeignKey

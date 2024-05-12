@@ -13,7 +13,12 @@ import { AuthMiddleware } from "../application/middleware/AuthMiddleware";
 import { TransactionUseCase } from "../application/use-case/TransactionUseCase";
 import { TransactionController } from "./TransactionController";
 import { PrismaTransactionRepository } from "../infrastructure/PrismaTransactionRepository";
-import { IDepositRequestDto, ISendRequestDto, IWithdrawRequestDto } from "../domain/TransactionDto";
+import {
+	IDepositRequestDto,
+	ISendRequestDto,
+	ITransactionAccountDto,
+	IWithdrawRequestDto,
+} from "../domain/TransactionDto";
 import { PrismaCurrencyRepository } from "../infrastructure/PrismaCurrencyRepository";
 
 export class Server {
@@ -72,16 +77,34 @@ export class Server {
 				this._accountController.find(req, res)
 			);
 
-			instance.post("/deposit", (req: FastifyRequest<{ Body: IDepositRequestDto }>, res: FastifyReply) =>
-				this._txController.deposit(req, res)
+			instance.post(
+				"/deposit/:accountId",
+				(req: FastifyRequest<{ Params: ITransactionAccountDto; Body: IDepositRequestDto }>, res: FastifyReply) =>
+					this._txController.deposit(req, res)
 			);
 
-			instance.post("/send", (req: FastifyRequest<{ Body: ISendRequestDto }>, res: FastifyReply) =>
-				this._txController.send(req, res)
+			instance.post(
+				"/send/:accountId",
+				(req: FastifyRequest<{ Params: ITransactionAccountDto; Body: ISendRequestDto }>, res: FastifyReply) =>
+					this._txController.send(req, res)
 			);
 
-			instance.post("/withdraw", (req: FastifyRequest<{ Body: IWithdrawRequestDto }>, res: FastifyReply) =>
-				this._txController.withdraw(req, res)
+			instance.post(
+				"/send/out/:accountId",
+				(req: FastifyRequest<{ Params: ITransactionAccountDto; Body: ISendRequestDto }>, res: FastifyReply) =>
+					this._txController.sendOut(req, res)
+			);
+
+			instance.post(
+				"/withdraw/:accountId",
+				(req: FastifyRequest<{ Params: ITransactionAccountDto; Body: IWithdrawRequestDto }>, res: FastifyReply) =>
+					this._txController.withdraw(req, res)
+			);
+
+			instance.get(
+				"/history/:accountId",
+				(req: FastifyRequest<{ Params: ITransactionAccountDto }>, res: FastifyReply) =>
+					this._txController.find(req, res)
 			);
 
 			next();

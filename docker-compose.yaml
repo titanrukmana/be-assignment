@@ -20,11 +20,17 @@ services:
       - 5434:5432
     volumes:
       - pgdb:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   payment:
     build: ./payment_service
     depends_on:
-      - pgdb
+      pgdb:
+        condition: service_healthy
     restart: always
     ports:
       - 8000:8000

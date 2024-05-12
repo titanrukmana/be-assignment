@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { ICurrencyRepository } from "../application/repository/CurrencyRepository";
 import { Currency } from "../domain/TransactionDto";
+import { PrismaClientValidationError } from "@prisma/client/runtime/library";
+import { BadRequestError } from "../shared/ErrorInstances";
 
 export class PrismaCurrencyRepository implements ICurrencyRepository {
 	public constructor(private readonly _prismaClient: PrismaClient) {}
@@ -16,6 +18,9 @@ export class PrismaCurrencyRepository implements ICurrencyRepository {
 
 			return curr.id;
 		} catch (e) {
+			if (e instanceof PrismaClientValidationError) {
+				e = new BadRequestError("field incomplete");
+			}
 			throw e;
 		}
 	}
@@ -29,6 +34,9 @@ export class PrismaCurrencyRepository implements ICurrencyRepository {
 
 			return curr;
 		} catch (e) {
+			if (e instanceof PrismaClientValidationError) {
+				e = new BadRequestError("field incomplete");
+			}
 			throw e;
 		}
 	}
@@ -42,6 +50,9 @@ export class PrismaCurrencyRepository implements ICurrencyRepository {
 
 			return !!result;
 		} catch (e) {
+			if (e instanceof PrismaClientValidationError) {
+				e = new BadRequestError("field incomplete");
+			}
 			throw e;
 		}
 	}
@@ -66,6 +77,9 @@ export class PrismaCurrencyRepository implements ICurrencyRepository {
 
 			return new Currency(result.id, result.code, result.toUsd);
 		} catch (e) {
+			if (e instanceof PrismaClientValidationError) {
+				e = new BadRequestError("field incomplete");
+			}
 			throw e;
 		}
 	}

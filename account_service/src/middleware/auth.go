@@ -12,7 +12,7 @@ func AuthMiddleware(sc *supabase.Client) gin.HandlerFunc {
 		token, err := c.Cookie("accessToken")
 
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized!"})
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 			c.Abort()
 			return
 		}
@@ -20,7 +20,7 @@ func AuthMiddleware(sc *supabase.Client) gin.HandlerFunc {
 		_, err = sc.Auth.User(c, token)
 
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized!"})
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 			c.Abort()
 			return
 		}

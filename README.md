@@ -34,3 +34,52 @@ Made for:
 
 ## API Reference
 [swagger](https://app.swaggerhub.com/apis/TITAN170300/ConcreteAI-assignment/1.0.0)
+
+## How to run
+
+### Clone the project
+
+```bash
+  git clone https://github.com/titanrukmana/be-assignment.git
+```
+
+Go to the project directory
+
+```bash
+  cd my-project
+```
+
+### Add your own .env files
+Please refer to the existing `.env.example` or see the instructions below:
+1. root `.env`
+```bash
+  POSTGRES_USER=
+  POSTGRES_PASSWORD=
+  POSTGRES_DB=
+  POSTGRES_PORT=
+```
+
+2. account_service `.env`
+```bash
+  SUPABASE_URL=
+  SUPABASE_ANON_KEY=
+```
+
+3. payment_service `.env`
+```bash
+  DATABASE_USER=
+  DATABASE_PASSWORD=
+  DATABASE_DB=
+  DATABASE_HOST=
+  DATABASE_PORT=
+  DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_DB}?schema=public"
+  SUPABASE_URL=
+  SUPABASE_ANON_KEY=
+```
+
+
+### Run docker-compose
+Run this from the root directory:
+```bash
+  docker-compose up -d
+```

@@ -16,6 +16,6 @@ COPY --from=builder /app/app .
 
 COPY .env .
 
-EXPOSE 3000
+EXPOSE ${PORT}
 
 CMD ["./app"]

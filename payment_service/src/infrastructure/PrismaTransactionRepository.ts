@@ -94,6 +94,20 @@ export class PrismaTransactionRepository implements ITransactionRepository {
 						},
 					},
 				});
+
+				await tx.paymentHistory.create({
+					data: {
+						amount: -1 * input.amount,
+						recipient: input.account.paymentIdentifier,
+						status: true,
+						currency: {
+							connect: { id: input.currency.id },
+						},
+						account: {
+							connect: { id: recipient.id },
+						},
+					},
+				});
 			});
 		} catch (e) {
 			if (e instanceof PrismaClientValidationError) {

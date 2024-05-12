@@ -28,5 +28,5 @@ func main() {
 
 	delivery.UserHandler(api, userUsecase, client)
 
-	r.Run()
+	r.Run(":3000")
 }
